@@ -167,9 +167,32 @@ setInterval(()=>{
 },250);
 
 /* نمایش */
-function top(label){
-  const pct=Math.round(100*Math.min(R.i,R.steps.length)/R.steps.length);
-  return `<div class="top"><button class="ghost" data-a="home">خانه</button><span class="mut">${label}</span></div><div class="bar"><i style="width:${pct}%"></i></div>`;
+function render(){
+  const a=$('#app');
+  document.body.dataset.m=R?R.ph:'home';
+  if(!R)return home(a);
+  const w=Math.floor((R.n-1)/3),lab=`جلسه ${fa(R.n)} · هفته ${fa(w+1)}`;
+  if(R.i>=R.steps.length){
+    a.innerHTML=topBar(lab)+`<section class="card"><h2>جلسه تمام شد</h2><p>کار خوبی کردی. آب بخور، پروتئین بخور و امشب خوب بخواب.</p></section><button class="primary" data-a="finish">ثبت جلسه</button>`;return;
+  }
+  const st=R.steps[R.i];
+  if(st.k==='n'){
+    const body=Array.isArray(st.x)?`<ul class="chk">${st.x.map(i=>`<li><label><input type="checkbox">${i}</label></li>`).join('')}</ul>`:`<p>${st.x}</p>`;
+    a.innerHTML=topBar(lab)+`<section class="card"><h2>${st.t}</h2>${body}</section><button class="primary" data-a="next">تمام شد</button>`;return;
+  }
+  const e=E[st.id],u={s:'ثانیه',m:'متر',e:'تکرار برای هر طرف','':'تکرار'}[st.u];
+  if(R.ph==='rest'||R.ph==='hold'){
+    const left=Math.max(0,Math.ceil((R.end-Date.now())/1000));
+    if(R.ph==='hold'){
+      a.innerHTML=topBar(lab)+`<div class="rest"><p>${e[0]}، نگه دار</p><div class="big" id="t">${fa(left)}</div><p>ثانیه</p></div>`;return;
+    }
+    const nx=R.steps[R.nx.i],nl=`${E[nx.id][0]} · ست ${fa(R.nx.s+1)} از ${fa(nx.n)}`;
+    a.innerHTML=topBar(lab)+`<div class="rest"><p>استراحت</p><div class="big" id="t">${fa(left)}</div><p>ثانیه</p><p>بعدی: ${nl}</p><div class="row"><button class="sec" data-a="add">+۱۵ ثانیه</button><button class="sec" data-a="skip">رد کردن</button></div></div>`;return;
+  }
+  const kg=/کیلو/.test(e[2]),hint=e[2].replace(/[^۰-۹ تا]/g,'').trim();
+  a.innerHTML=topBar(lab)+`<section class="card"><h2>${e[0]}</h2><p class="en">${e[1]}</p><div class="setno">ست ${fa(R.s+1)} از ${fa(st.n)}</div><div class="big">${fa(st.reps)}</div><div class="unit">${u}</div>${st.fx?`<p class="ex">${st.fx}</p>`:''}`
+  +(kg?`<label class="w">${st.id==='ap'?'کمک':'وزنه'} (کیلو)<input id="w" type="number" inputmode="decimal" step="0.5" value="${S.w[st.id]||''}" placeholder="${hint}"></label>`:`<p class="ex">${e[2]}</p>`)
+  +`<p class="tip">${e[3]}</p></section><button class="primary" data-a="${st.u==='s'?'hold':'done'}">${st.u==='s'?`شروع ${fa(st.reps)} ثانیه`:'ست تمام شد'}</button>`;
 }
 function render(){
   const a=$('#app');
