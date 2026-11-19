@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2D5BFF">
+<title>برنامه تمرین ۴ هفته‌ای</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF2F5;--ink:#13202C;--mut:#5B6B7A;--card:#fff;--acc:#2D5BFF;--ok:#1F9D6B;--on:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#0F1A24;--ink:#EAF0F5;--mut:#9AABBA;--card:#17283A;--acc:#6D8CFF;--on:#0F1A24}}
+body[data-m=rest]{--bg:#F7B733;--ink:#241800;--mut:#5a4300;--card:#FFD878;--acc:#241800;--on:#F7B733}
+body[data-m=hold]{--bg:#2D5BFF;--ink:#fff;--mut:#dbe4ff;--card:#4A71FF;--acc:#fff;--on:#2D5BFF}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:Vazirmatn,Tahoma,system-ui,sans-serif;line-height:1.7;transition:background .25s}
+#app{max-width:520px;margin:auto;padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom))}
+h1{font-size:26px;margin:8px 0 0;font-weight:800}
+h2{font-size:28px;margin:0;font-weight:800;line-height:1.3}
+h3{font-size:16px;margin:22px 0 8px;color:var(--mut);font-weight:600}
+p{margin:6px 0}
+.mut,.en{color:var(--mut)}
+.en{direction:ltr;text-align:right;margin:0}
+button{font:inherit;cursor:pointer;border:0;border-radius:18px;color:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.primary{display:block;width:100%;min-height:64px;margin-top:16px;background:var(--acc);color:var(--on);font-size:20px;font-weight:800}
+.sec{flex:1;min-height:52px;background:var(--card);font-weight:600}
+.ghost{background:none;padding:8px 4px;color:var(--mut);font-weight:600}
+.row{display:flex;gap:10px;margin-top:14px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.bar{height:6px;border-radius:3px;background:var(--card);margin:6px 0 16px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.card{background:var(--card);border-radius:24px;padding:20px}
+.setno{margin-top:14px;font-weight:600}
+.big{font-size:132px;line-height:1.05;font-weight:800;color:var(--acc);text-align:center;margin-top:4px}
+.unit{text-align:center;font-weight:600;margin-top:-6px}
+.ex{text-align:center;color:var(--mut);font-weight:600}
+.tip{margin-top:14px;padding-top:12px;border-top:2px solid var(--bg);color:var(--mut);font-size:15px}
+.w{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;font-weight:600}
+.w input{width:120px;min-height:48px;border:2px solid var(--mut);border-radius:14px;background:var(--bg);color:var(--ink);font:inherit;font-size:20px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{background:var(--card);padding:14px 8px;min-height:84px;font-weight:800;font-size:17px}
+.tile small{display:block;font-weight:400;font-size:12px;color:var(--mut);line-height:1.4;margin-top:2px}
+.tile.d{background:var(--ok);color:#fff}.tile.d small{color:#e6fff3}
+.tile.d::after{content:" ✓"}
+.tile.nx{outline:3px solid var(--acc)}
+.chk{list-style:none;padding:0;margin:10px 0 0}
+.chk li{padding:8px 0;border-bottom:1px solid var(--bg)}
+.chk input{width:22px;height:22px;margin-left:10px;vertical-align:middle;accent-color:var(--acc)}
+.rest .big{color:var(--ink);font-size:168px}
+.rest{text-align:center;padding-top:12vh}
+.rest p{font-size:18px;font-weight:600}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),fa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+let S={done:[],w:{},cur:null},R=null,ac=null,wl=null;
+try{S=Object.assign(S,JSON.parse(localStorage.getItem('wk')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('wk',JSON.stringify(S))}catch(e){}};
+
+/* حرکات: [نام فارسی، نام انگلیسی، وزنه شروع، نکته] */
+const E={
+lp:['پرس پا','Leg Press','۳۰ تا ۵۰ کیلو','پشت و باسن به صندلی؛ ضامن‌های ایمنی را تنظیم کن. زانو قفل نشود و به داخل نیفتد.'],
+bs:['اسکات روی نیمکت با کش','Box Squat','وزن بدن','کش بالای زانو. باسن را عقب ببر، آرام بنشین و زانو را بیرون فشار بده.'],
+lc:['جلو پشت پا','Leg Curl','۱۵ تا ۲۵ کیلو','پد روی مچ پا. باسن بلند نشود، برگشت آرام.'],
+gb:['پل باسن','Glute Bridge','وزن بدن','باسن را تا خط صاف بالا ببر و ۱ ثانیه نگه دار. کمر زیاد قوس نگیرد.'],
+ap:['بارفیکس کمکی','Assisted Pull-Up','کمک: ۲۰ تا ۳۰ کیلو','اول شانه‌ها را پایین بکش، بعد سینه را به میله برسان. پایین آمدن ۳ ثانیه. تاب نخور.'],
+sr:['زیربغل سیم‌کش نشسته','Seated Cable Row','۲۰ تا ۳۰ کیلو','سینه بالا، کتف‌ها را به هم نزدیک کن، بدن تاب نخورد.'],
+pl:['پلانک','Plank','وزن بدن','ساعد و پنجه؛ بدن یک خط صاف. نفس را حبس نکن.'],
+pg:['پرش مچ پا','Pogo Jumps','وزن بدن','زانوها تقریباً صاف، جهش کوتاه و سریع روی جلوی پا.'],
+sj:['پرش اسکات','Squat Jump','وزن بدن','با تمام قدرت بپر و نرم فرود بیا؛ زانو داخل نیفتد. بین تکرارها ۳ تا ۵ ثانیه مکث کن.'],
+sp:['دوی سرعت','Sprint','زمین صاف','بعد از گرم کردن کامل. برگشت پیاده. اگر پشت ران درد گرفت قطع کن. روی تردمیل: ۲۰ ثانیه دوی تند اما کنترل‌شده.'],
+cp:['پرس سینه دستگاه','Chest Press Machine','۱۵ تا ۲۵ کیلو','کتف‌ها به پشتی، آرنج قفل نشود.'],
+lat:['لت','Lat Pulldown','۲۵ تا ۴۰ کیلو','میله را به بالای سینه بکش؛ پشت گردن نه.'],
+fp:['فیس پول سیم‌کش','Face Pull','۸ تا ۱۵ کیلو','طناب هم‌سطح صورت، آرنج بالا، خیلی سبک.'],
+db:['دد باگ','Dead Bug','وزن بدن','کمر به زمین بچسبد؛ دست راست و پای چپ را دراز کن.'],
+su:['بالا رفتن از پله کوتاه','Step-Up','وزن بدن، جعبه ۲۰ تا ۳۰ سانتی‌متر','با پای بالا فشار بده؛ زانو داخل نیفتد.'],
+sg:['پل باسن تک‌پا','Single-Leg Glute Bridge','وزن بدن','یک پا بالا؛ لگن نچرخد.'],
+ha:['دور کردن پا از بدن','Hip Abduction','۱۵ تا ۲۵ کیلو','پاها را آرام بیرون ببر و آرام برگردان.'],
+cr:['ساق پا ایستاده','Calf Raise','۲۰ تا ۴۰ کیلو','دامنه کامل، ۱ ثانیه در بالا.'],
+dh:['آویزان ماندن','Dead Hang','وزن بدن','شانه‌ها کمی پایین؛ درد شانه یعنی قطع.'],
+bd:['باردوم','Bird Dog','وزن بدن','دست راست و پای چپ را همزمان دراز کن، ۲ ثانیه نگه دار.']};
+
+const WARM='۵ دقیقه دوچرخه یا تردمیل آرام (بتوانی حرف بزنی)، بعد ۱۰ چرخش لگن، ۱۰ تاب پا برای هر پا، ۱۰ اسکات با وزن بدن و ۱۰ چرخش بازو.';
+const CORR=['جمع کردن چانه: ۱۰ بار، ۵ ثانیه نگه‌داشتن','فرشته دیواری: ۱۰ بار','کشش ستون سینه‌ای روی فوم رولر: ۸ بار','صدف (Clamshell): ۱۲ بار هر طرف','قدم جانبی با کش: ۱۰ قدم هر طرف','کوتاه کردن کف پا: ۵ بار، ۱۰ ثانیه'];
+const COOL='هر کشش ۲۰ تا ۳۰ ثانیه، بدون تکان: سینه در چارچوب در، کنار گردن، جلو ران و جلو لگن، پشت ران، ساق، حالت کودک.';
+
+/* هر حرکت: [شناسه، ست×تکرار در ۴ هفته، استراحت ثانیه، توضیح هفتگی]؛ s=ثانیه، m=متر، e=هر طرف */
+const PL={
+A:{name:'پا قوی + پشت',ct:'هوازی',c:['۱۰ دقیقه دوچرخه آرام','۱۰ دقیقه دوچرخه آرام','۱۲ دقیقه دوچرخه آرام','۱۲ دقیقه دوچرخه آرام'],ex:[
+['lp',['2x12','3x10','3x10','3x8'],90],
+['bs',['2x8','3x8','3x10','3x12'],90],
+['lc',['2x12','3x10','3x12','3x12'],60],
+['gb',['2x12','3x12','3x15','3x15'],60],
+['ap',['3x3','3x4','3x5','3x6'],90],
+['sr',['2x12','3x10','3x10','3x12'],90],
+['pl',['2x20s','3x20s','3x30s','3x35s'],45]]},
+B:{name:'پرش + سرعت + بالاتنه',ct:'هوازی',c:Array(4).fill('۵ دقیقه راه رفتن آرام (دوی سرعت جای هوازی را گرفته)'),ex:[
+['pg',['3x8','3x10','3x12','3x15'],60],
+['sj',['3x3','3x4','3x5','4x5'],90],
+['sp',['4x20m','5x20m','6x20m','6x30m'],120,['۷۰٪ تلاش','۷۵٪ تلاش','۸۰٪ تلاش','۸۵٪ تلاش']],
+['cp',['2x12','2x12','2x10','2x12'],90],
+['lat',['2x12','3x10','3x10','3x12'],90],
+['fp',['2x12','2x15','3x12','3x15'],60],
+['db',['2x6e','3x6e','3x8e','3x8e'],45]]},
+C:{name:'پا + پشت + استقامت',ct:'هوازی استقامت',c:['۴ بار: ۲ دقیقه دوی آرام + ۱ دقیقه راه رفتن','۵ بار: ۲ دقیقه دوی آرام + ۱ دقیقه راه رفتن','۴ بار: ۳ دقیقه دوی آرام + ۱ دقیقه راه رفتن','۴ بار: ۴ دقیقه دوی آرام + ۱ دقیقه راه رفتن'],ex:[
+['su',['2x8e','3x8e','3x10e','3x10e'],90],
+['sg',['2x6e','3x6e','3x8e','3x10e'],60],
+['ha',['2x12','3x12','3x15','3x15'],60],
+['cr',['2x15','3x15','3x15','3x18'],60],
+['ap',['3x3','3x4','3x5','3x6'],90],
+['dh',['2x10s','3x10s','3x15s','3x15s'],60],
+['bd',['2x6e','3x6e','3x8e','3x8e'],45]]}};
+
+function build(n){
+  const w=Math.floor((n-1)/3),P=PL['ABC'[(n-1)%3]];
+  const st=[{k:'n',t:'گرم کردن',x:WARM},{k:'n',t:'بلوک اصلاحی: ۲ دور',x:CORR}];
+  P.ex.forEach(([id,r,rest,fx])=>{const m=/(\d+)x(\d+)([sme]?)/.exec(r[w]);st.push({k:'s',id,n:+m[1],reps:+m[2],u:m[3],rest,fx:fx&&fx[w]})});
+  st.push({k:'n',t:P.ct,x:P.c[w]},{k:'n',t:'سرد کردن',x:COOL});
+  return st;
+}
+
+/* صدا */
+function beep(f,d,t=0,g=.3){if(!ac)return;const o=ac.createOscillator(),v=ac.createGain(),n=ac.currentTime+t;o.frequency.value=f;v.gain.setValueAtTime(g,n);v.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(v);v.connect(ac.destination);o.start(n);o.stop(n+d)}
+function ding(){beep(988,.5,0,.5);beep(1319,.8,.25,.5);navigator.vibrate&&navigator.vibrate([200,100,200])}
+async function lock(){try{wl=await navigator.wakeLock.request('screen')}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(R&&document.visibilityState==='visible')lock()});
+
+/* منطق */
+const A={
+  start(n){R={n:+n,steps:build(+n),i:0,s:0,ph:'work',end:0};lock();go()},
+  resume(){const c=S.cur;R={n:c.n,steps:build(c.n),i:c.i,s:c.s,ph:'work',end:0};lock();go()},
+  home(){R=null;render()},
+  next(){R.i++;R.s=0;go()},
+  done(){doneSet()},
+  hold(){R.ph='hold';R.lt=0;R.end=Date.now()+R.steps[R.i].reps*1000;render()},
+  skip(){endRest()},
+  add(){R.end+=15000},
+  finish(){if(!S.done.includes(R.n))S.done.push(R.n);S.cur=null;save();try{wl&&wl.release()}catch(e){}R=null;render()},
+  reset(){if(confirm('همه پیشرفت و وزنه‌های ذخیره‌شده پاک شود؟')){S={done:[],w:{},cur:null};save();render()}}
+};
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');if(!b)return;
+  ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume&&ac.resume();
+  A[b.dataset.a](b.dataset.n);
+});
+function go(){S.cur={n:R.n,i:R.i,s:R.s};save();render()}
+function doneSet(){
+  const st=R.steps[R.i],w=$('#w');
+  if(w&&w.value)S.w[st.id]=w.value;
+  let ni=R.i,ns=R.s+1;if(ns>=st.n){ni++;ns=0}
+  const nx=R.steps[ni];R.nx={i:ni,s:ns};
+  if(!nx||nx.k==='n'){R.i=ni;R.s=ns;R.ph='work';R.end=0;go();return}
+  R.ph='rest';R.lt=0;R.end=Date.now()+st.rest*1000;save();render();
+}
+function endRest(){R.i=R.nx.i;R.s=R.nx.s;R.ph='work';R.end=0;go()}
+setInterval(()=>{
+  if(!R||!R.end)return;
+  const l=Math.ceil((R.end-Date.now())/1000),t=$('#t');
+  if(t)t.textContent=fa(Math.max(l,0));
+  if(l<=3&&l>0&&R.lt!==l){R.lt=l;beep(660,.12)}
+  if(l<=0){R.end=0;ding();R.ph==='hold'?doneSet():endRest()}
+},250);
+
+/* نمایش */
+function top(label){
+  const pct=Math.round(100*Math.min(R.i,R.steps.length)/R.steps.length);
+  return `<div class="top"><button class="ghost" data-a="home">خانه</button><span class="mut">${label}</span></div><div class="bar"><i style="width:${pct}%"></i></div>`;
+}
+function render(){
+  const a=$('#app');
+  document.body.dataset.m=R?R.ph:'home';
+  if(!R)return home(a);
+  const w=Math.floor((R.n-1)/3),lab=`جلسه ${fa(R.n)} · هفته ${fa(w+1)}`;
+  if(R.i>=R.steps.length){
+    a.innerHTML=top(lab)+`<section class="card"><h2>جلسه تمام شد</h2><p>کار خوبی کردی. آب بخور، پروتئین بخور و امشب خوب بخواب.</p></section><button class="primary" data-a="finish">ثبت جلسه</button>`;return;
+  }
+  const st=R.steps[R.i];
+  if(st.k==='n'){
+    const body=Array.isArray(st.x)?`<ul class="chk">${st.x.map(i=>`<li><label><input type="checkbox">${i}</label></li>`).join('')}</ul>`:`<p>${st.x}</p>`;
+    a.innerHTML=top(lab)+`<section class="card"><h2>${st.t}</h2>${body}</section><button class="primary" data-a="next">تمام شد</button>`;return;
+  }
+  const e=E[st.id],u={s:'ثانیه',m:'متر',e:'تکرار برای هر طرف','':'تکرار'}[st.u];
+  if(R.ph==='rest'||R.ph==='hold'){
+    const left=Math.max(0,Math.ceil((R.end-Date.now())/1000));
+    if(R.ph==='hold'){
+      a.innerHTML=top(lab)+`<div class="rest"><p>${e[0]}، نگه دار</p><div class="big" id="t">${fa(left)}</div><p>ثانیه</p></div>`;return;
+    }
+    const nx=R.steps[R.nx.i],nl=`${E[nx.id][0]} · ست ${fa(R.nx.s+1)} از ${fa(nx.n)}`;
+    a.innerHTML=top(lab)+`<div class="rest"><p>استراحت</p><div class="big" id="t">${fa(left)}</div><p>ثانیه</p><p>بعدی: ${nl}</p><div class="row"><button class="sec" data-a="add">+۱۵ ثانیه</button><button class="sec" data-a="skip">رد کردن</button></div></div>`;return;
+  }
+  const kg=/کیلو/.test(e[2]),hint=e[2].replace(/[^۰-۹ تا]/g,'').trim();
+  a.innerHTML=top(lab)+`<section class="card"><h2>${e[0]}</h2><p class="en">${e[1]}</p><div class="setno">ست ${fa(R.s+1)} از ${fa(st.n)}</div><div class="big">${fa(st.reps)}</div><div class="unit">${u}</div>${st.fx?`<p class="ex">${st.fx}</p>`:''}`
+  +(kg?`<label class="w">${st.id==='ap'?'کمک':'وزنه'} (کیلو)<input id="w" type="number" inputmode="decimal" step="0.5" value="${S.w[st.id]||''}" placeholder="${hint}"></label>`:`<p class="ex">${e[2]}</p>`)
+  +`<p class="tip">${e[3]}</p></section><button class="primary" data-a="${st.u==='s'?'hold':'done'}">${st.u==='s'?`شروع ${fa(st.reps)} ثانیه`:'ست تمام شد'}</button>`;
+}
+function home(a){
+  const nxt=[...Array(12).keys()].map(i=>i+1).find(n=>!S.done.includes(n));
+  let h=`<h1>برنامه تمرین ۴ هفته‌ای</h1><p class="mut">${fa(S.done.length)} از ۱۲ جلسه انجام شده</p>`;
+  if(S.cur)h+=`<button class="primary" data-a="resume">ادامه جلسه ${fa(S.cur.n)}</button>`;
+  for(let w=0;w<4;w++){
+    h+=`<h3>هفته ${fa(w+1)}</h3><div class="grid">`;
+    for(let k=1;k<=3;k++){const n=w*3+k;
+      h+=`<button class="tile${S.done.includes(n)?' d':''}${n===nxt?' nx':''}" data-a="start" data-n="${n}">جلسه ${fa(n)}<small>${PL['ABC'[k-1]].name}</small></button>`}
+    h+='</div>';
+  }
+  h+=`<p class="mut" style="margin-top:24px;font-size:14px">دوشنبه و چهارشنبه و شنبه یا هر سه روز با فاصله. وزنه‌ها را در هر ست وارد کن؛ جلسه بعد همان عدد نمایش داده می‌شود. همه چیز روی همین گوشی ذخیره می‌شود.</p><button class="ghost" data-a="reset">پاک کردن پیشرفت</button>`;
+  a.innerHTML=h;
+}
+render();
+</script>
+</body>
+</html>
