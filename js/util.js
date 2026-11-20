@@ -8,11 +8,11 @@ const fmtDate=function(t){var d=new Date(t);return fa(d.getFullYear())+'/'+fa(pa
 const fmtTime=function(s){return fa(pad(Math.floor(s/60)))+':'+fa(pad(s%60))};
 
 /* ================= STATE ================= */
-const DEF={v:5,done:[],w:{},cur:null,log:{},history:[],order:{},skip:{},settings:{theme:'auto',sound:true,vibrate:true,unit:'kg',muscles:true,mini:true},startedAt:null};
+const DEF={v:5,done:[],w:{},cur:null,log:{},history:[],custom:[],order:{},skip:{},settings:{bw:null,theme:'auto',sound:true,vibrate:true,unit:'kg',muscles:true,mini:true},startedAt:null};
 const clone=function(o){return JSON.parse(JSON.stringify(o))};
 let S=clone(DEF);
 try{var raw=localStorage.getItem('wk');if(raw){S=Object.assign(clone(DEF),JSON.parse(raw));}}catch(e){}
-function fix(){S.order=S.order||{};S.skip=S.skip||{};S.history=S.history||[];S.settings=Object.assign({},DEF.settings,S.settings||{});}
+function fix(){S.order=S.order||{};S.skip=S.skip||{};S.history=S.history||[];S.custom=S.custom||[];S.settings=Object.assign({},DEF.settings,S.settings||{});}
 fix();
 const save=function(){try{localStorage.setItem('wk',JSON.stringify(S))}catch(e){}};
 const KG_TO_LB=2.20462;

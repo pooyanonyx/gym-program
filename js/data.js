@@ -91,9 +91,9 @@ function exItems(n){
 function build(n,ids){
   var w=Math.floor((n-1)/3),P=PL['ABC'[(n-1)%3]],map={};
   exItems(n).forEach(function(x){map[x.id]=x});
-  var st=[{k:'n',t:'گرم کردن',x:WARM},{k:'n',t:'بلوک اصلاحی: ۲ دور',x:CORR}];
+  var st=[{k:'n',t:'گرم کردن',x:WARM,m:{min:5,met:4,cat:'warm'}},{k:'n',t:'بلوک اصلاحی: ۲ دور',x:CORR,m:{min:6,met:3,cat:'warm'}}];
   ids.forEach(function(id){if(map[id])st.push(map[id])});
-  st.push({k:'n',t:P.ct,x:P.c[w]},{k:'n',t:'سرد کردن',x:COOL});
+  st.push({k:'n',t:P.ct,x:P.c[w],m:{min:P.cm[w],met:P.cmet,cat:'cardio'}},{k:'n',t:'سرد کردن',x:COOL,m:{min:5,met:2.5,cat:'cool'}});
   return st;
 }
 function origOrder(n){return exItems(n).map(function(x){return x.id})}
@@ -107,5 +107,10 @@ function getOrder(n){
   return defOrder(n);
 }
 function getSkip(n){return S.skip[String(n)]||[]}
-function setsText(it){var u={s:'ثانیه',m:'متر',e:'تکرار هر طرف','':'تکرار'}[it.u];return fa(it.n)+' ست × '+fa(it.reps)+' '+u}
+function setsText(it){var u={s:'ثانیه',m:'متر',e:'تکرار هر طرف',t:'دقیقه','':'تکرار'}[it.u];return fa(it.n)+' ست × '+fa(it.reps)+' '+u}
 
+
+/* مدت (دقیقه) و MET بخش هوازی هر نوع جلسه ، برای محاسبه کالری */
+PL.A.cm=[10,10,12,12];PL.A.cmet=5.5;
+PL.B.cm=[5,5,5,5];PL.B.cmet=3.5;
+PL.C.cm=[12,15,16,20];PL.C.cmet=6.5;
